@@ -4,7 +4,7 @@ namespace Src\Repository;
 
 use Src\Models\ReservedRoom;
 use Src\Models\Room;
-use Src\Models\User;
+use Src\Repository\Exceptions\ReserveException;
 use Src\Repository\Interfaces\ReservationInterface;
 
 class  ReservationRepository extends BaseRepository implements ReservationInterface
@@ -23,24 +23,25 @@ class  ReservationRepository extends BaseRepository implements ReservationInterf
     }
 
     // get the user
-    private function checkFree(ReservedRoom $reservedRoom): User
+    private function checkFree(ReservedRoom $reservedRoom)
     {
         $stmt = $this->currentDb->prepare(static::CHECK_ROOM);
-        $stmt->execute([$reservedRoom->getRoom(), $reservedRoom->getStartDate(), $reservedRoom->getEndDate()]);
+        $stmt->execute([$reservedRoom->getRoom(), $reservedRoom->getEndDate(), $reservedRoom->getStartDate()]);
         $data = $stmt->fetch();
-        return new User($data);
+        if ($data) {
+            throw new ReserveException(ReservedRoom::fromDB($data));
+        }
     }
 
     public function reserveTheRoom(ReservedRoom $reservedRoom)
     {
         $this->checkFree($reservedRoom);
         $stmt = $this->currentDb->prepare(static::RESERVE_ROOM);
-        $stmt->execute([
+        return $stmt->execute([
             $reservedRoom->getRoom(),
             $reservedRoom->getUser()->getPhone(),
             $reservedRoom->getStartDate(),
             $reservedRoom->getEndDate()
         ]);
-        return $stmt->fetch();
     }
 }

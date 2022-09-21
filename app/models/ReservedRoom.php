@@ -26,6 +26,16 @@ class ReservedRoom
         ]);
     }
 
+    public static function fromDB($data): ReservedRoom
+    {
+        return new static([
+            "room" => new Room($data),
+            "user" => new User($data),
+            "start_date" => ReserveDate::fromDate($data['start_date']),
+            "end_date" => ReserveDate::fromDate($data['end_date'])
+        ]);
+    }
+
     public function getRoom()
     {
         return $this->room->getRoomNumber();

@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Commands\Repository\Exception;
+namespace Src\Repository\Exceptions;
 
 use Src\Models\ReservedRoom;
 use Throwable;
@@ -14,7 +14,9 @@ class ReserveException extends \Exception
         $this->reservedRoom = $reservedRoom;
         parent::__construct($message, $code, $previous);
     }
-    public function getReservedRoom() {
+
+    public function getReservedRoom(): ReservedRoom
+    {
         return $this->reservedRoom;
     }
 }

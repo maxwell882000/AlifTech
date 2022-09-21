@@ -11,10 +11,19 @@ class ReserveDate
 
     public function __construct($year, $month, $day, $hour)
     {
-        $this->year = $this->checkOnZero($year);
+        $this->year = $year;
         $this->month = $this->checkOnZero($month);
         $this->day = $this->checkOnZero($day);
         $this->hour = $this->checkOnZero($hour);
+    }
+
+    public static function fromDate(string $date)
+    {
+        $date = date_create_from_format('Y-m-d H:i:s', $date);
+        return new static($date->format("Y"),
+            $date->format("m"),
+            $date->format('d'),
+            $date->format("H"));
     }
 
     public function getDate()
