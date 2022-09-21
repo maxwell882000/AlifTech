@@ -2,6 +2,7 @@
 
 namespace Src\Inputs;
 
+use Src\Commands\Traits\HasCommand;
 use Src\Models\ReserveDate;
 use Src\Models\ReservedRoom;
 use Src\Models\Room;
@@ -9,11 +10,11 @@ use Src\Models\User;
 
 class ReservedRoomInput
 {
-    use \Src\Commands\Traits\HasCommand;
+    use HasCommand;
 
     private User $user;
 
-    public function __construct(\Src\Models\User $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
