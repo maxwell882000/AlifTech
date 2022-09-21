@@ -17,9 +17,11 @@ class UserCommand extends BaseCommand implements \Src\Commnads\Interfaces\UserIn
         $this->userRepo = new \Src\Repository\UserRepository();
     }
 
-    private function getRooms()
+    private function getRooms($user)
     {
-
+        sleep(2);
+        clearTerminal();
+        $listRooms = new ListRoom($user);
     }
 
     private function login()
@@ -27,10 +29,10 @@ class UserCommand extends BaseCommand implements \Src\Commnads\Interfaces\UserIn
         $phone = readline("Write phone : ");
         $password = readline("Write password : ");
         $user = User::login($phone, $password);
-        $user_fetched = $this->userRepo->checkUser($user);
-        if ($user_fetched) {
+        $userFetched = $this->userRepo->checkUser($user);
+        if ($userFetched) {
             echo "User is logged in \n";
-            $this->getRooms();
+            $this->getRooms($userFetched);
         } else {
             echo "Wrong credentials \n";
         }
@@ -46,6 +48,7 @@ class UserCommand extends BaseCommand implements \Src\Commnads\Interfaces\UserIn
         $response = $this->userRepo->insertUser($user);
         if ($response) {
             echo "User created \n";
+            $this->getRooms($user);
         } else {
             echo "User failed to create\n";
         }

@@ -5,15 +5,15 @@ class ReservedRoom
 {
     private Room $room;
     private User $user;
-    private ReserveDate $start_date;
-    private ReserveDate $end_date;
+    private ReserveDate $startDate;
+    private ReserveDate $endDate;
 
     public function __construct($data)
     {
         $this->room = $data['room'] ?? null;
         $this->user = $data['user'] ?? null;
-        $this->start_date = $data['start_date'] ?? null;
-        $this->end_date = $data['end_date'] ?? null;
+        $this->startDate = $data['start_date'] ?? null;
+        $this->endDate = $data['end_date'] ?? null;
     }
 
     public static function new(Room $room, User $user, ReserveDate $start_date, ReserveDate $end_date): ReservedRoom
@@ -48,11 +48,11 @@ class ReservedRoom
 
     public function getStartDate(): string
     {
-        return $this->start_date->getDate();
+        return $this->startDate->getDate();
     }
 
     public function getEndDate(): string
     {
-        return $this->end_date->getDate();
+        return $this->endDate->getDate();
     }
 }

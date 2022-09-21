@@ -1,11 +1,11 @@
 <?php
 
-
+namespace Src\Commands;
 use Src\Commands\Abstracts\BaseCommand;
-use Src\Commands\Repository\Exception\ReserveException;
 use Src\Models\ReserveDate;
 use Src\Models\ReservedRoom;
 use Src\Models\Room;
+use Src\Repository\Exceptions\ReserveException;
 use Src\Repository\ReservationRepository;
 
 class ListRoom extends BaseCommand implements \Src\Commnads\Interfaces\RoomCommand
@@ -56,9 +56,9 @@ class ListRoom extends BaseCommand implements \Src\Commnads\Interfaces\RoomComma
     private function correctDates(): array
     {
         echo "Write start date of reservation \n";
-        $start_date = $this->correctStartDate();
-        $end_date = $this->correctDuration($start_date);
-        return [$start_date, $end_date];
+        $startDate = $this->correctStartDate();
+        $endDate = $this->correctDuration($startDate);
+        return [$startDate, $endDate];
     }
 
     private function getRoom(): ReservedRoom
@@ -73,21 +73,31 @@ class ListRoom extends BaseCommand implements \Src\Commnads\Interfaces\RoomComma
         try {
             $room = $this->getRoom();
             $this->reserveRepo->reserveTheRoom($room);
-        } catch (ReserveException $ex) {
 
+        } catch (ReserveException $ex) {
+            $reservedRoom = $ex->getReservedRoom();
+            echo sprintf("Room is already resereved by % \n", $reservedRoom->getUser()->getName());
+            echo sprintf("Start date : %s \n", $reservedRoom->getStartDate());
+            echo sprintf("End date: %s \n", $reservedRoom->getEndDate());
         }
 
     }
 
     public function commandBody()
     {
-        echo "==========Rooms============";
-        echo "1. RESERVE ROOM";
-        echo "2. BACK";
+        echo "==========Rooms============\n";
+        echo "1. RESERVE ROOM\n";
+        echo "2. BACK\n";
         $choice = $this->readCommand();
         switch ($choice) {
             case static::RESERVE_ROOM:
-                $this->reserveRoom();
+                $this->checkReservation();
+                break;
+            case static::BACK:
+                $this->close();
+                break;
+            default:
+                $this->incorrectChoice();
         }
     }
 }
