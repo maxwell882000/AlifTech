@@ -1,0 +1,10 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Src\\": "app"
+    },
+    "files": [
+      "app/helper/helper_functions.php"
+    ]
+  }
+}
