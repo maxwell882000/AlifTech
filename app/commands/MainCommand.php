@@ -3,8 +3,8 @@
 namespace Src\Commands;
 
 use Src\Commands\Abstracts\BaseCommand;
+use Src\Commands\Interfaces\MainInterface;
 use Src\Commands\Traits\HasCommand;
-use Src\Commnads\Interfaces\MainInterface;
 use Src\Repository\StructureRepository;
 
 class MainCommand extends BaseCommand implements MainInterface

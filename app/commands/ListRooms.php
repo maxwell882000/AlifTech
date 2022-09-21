@@ -1,14 +1,16 @@
 <?php
 
 namespace Src\Commands;
+
 use Src\Commands\Abstracts\BaseCommand;
+use Src\Commands\Interfaces\RoomCommand;
 use Src\Models\ReserveDate;
 use Src\Models\ReservedRoom;
 use Src\Models\Room;
 use Src\Repository\Exceptions\ReserveException;
 use Src\Repository\ReservationRepository;
 
-class ListRoom extends BaseCommand implements \Src\Commnads\Interfaces\RoomCommand
+class ListRooms extends BaseCommand implements RoomCommand
 {
     use \Src\Commands\Traits\HasCommand;
 
@@ -73,10 +75,15 @@ class ListRoom extends BaseCommand implements \Src\Commnads\Interfaces\RoomComma
         try {
             $room = $this->getRoom();
             $this->reserveRepo->reserveTheRoom($room);
-
+            echo "Successfully reserved the room !\n";
+            mail($room->getUser()->getEmail(),
+                "Successful reservation",
+                sprintf("You have successfully reserved %s room. Start date is %s",
+                    $room->getRoom(),
+                    $room->getStartDate()));
         } catch (ReserveException $ex) {
             $reservedRoom = $ex->getReservedRoom();
-            echo sprintf("Room is already resereved by % \n", $reservedRoom->getUser()->getName());
+            echo sprintf("Room is already reserved by %s \n", $reservedRoom->getUser()->getName());
             echo sprintf("Start date : %s \n", $reservedRoom->getStartDate());
             echo sprintf("End date: %s \n", $reservedRoom->getEndDate());
         }

@@ -2,7 +2,7 @@
 
 namespace Src\Commands\Abstracts;
 
-use Src\Commnads\Interfaces\CommandInterface;
+use Src\Commands\Interfaces\CommandInterface;
 
 abstract class BaseCommand implements CommandInterface
 {

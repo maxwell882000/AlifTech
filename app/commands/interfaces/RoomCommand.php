@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Commnads\Interfaces;
+namespace Src\Commands\Interfaces;
 
 interface RoomCommand
 {
