@@ -5,17 +5,19 @@ namespace Src\Commands;
 use Src\Commands\Abstracts\BaseCommand;
 use Src\Commands\Interfaces\UserInterface;
 use Src\Commands\Traits\HasCommand;
-use Src\Models\User;
+use Src\Inputs\UserInput;
 
 class UserCommand extends BaseCommand implements UserInterface
 {
     use HasCommand;
 
     private $userRepo;
+    private $userInput;
 
     public function __construct()
     {
         $this->userRepo = new \Src\Repository\UserRepository();
+        $this->userInput = new UserInput();
     }
 
     private function getRooms($user)
@@ -28,9 +30,7 @@ class UserCommand extends BaseCommand implements UserInterface
 
     private function login()
     {
-        $phone = readline("Write phone : ");
-        $password = readline("Write password : ");
-        $user = User::login($phone, $password);
+        $user = $this->userInput->login();
         $userFetched = $this->userRepo->checkUser($user);
         if ($userFetched) {
             echo "User is logged in \n";
@@ -43,11 +43,7 @@ class UserCommand extends BaseCommand implements UserInterface
 
     private function register()
     {
-        $phone = readline("Write phone : ");
-        $password = readline("Write password : ");
-        $name = readline("Write name : ");
-        $email = readline("Write email : ");
-        $user = User::register($phone, $password, $name, $email);
+        $user = $this->userInput->register();
         $response = $this->userRepo->insertUser($user);
         if ($response) {
             echo "User created \n";

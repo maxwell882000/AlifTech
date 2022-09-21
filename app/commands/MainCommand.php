@@ -15,6 +15,8 @@ class MainCommand extends BaseCommand implements MainInterface
     {
         $structure = new StructureRepository();
         $structure->createStructure();
+        clearTerminal();;
+        echo "Successfully created the schema  !\n";
     }
 
     private function getRooms()
